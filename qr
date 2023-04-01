@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Сканер QR-кодов</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <h1>Сканер QR-кодов</h1>
+  <p>Нажмите на кнопку ниже, чтобы открыть камеру и начать сканирование QR-кода:</p>
+  <button onclick="scanQR()">Сканировать QR-код</button>
+  <div id="qr-result"></div>
+
+  <script>
+    function scanQR() {
+      const scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      scanner.addListener('scan', function (content) {
+        document.getElementById('qr-result').innerHTML = content;
+        scanner.stop();
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
+  </script>
+</body>
+</html>
