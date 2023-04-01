@@ -2,11 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Scan QR-кода</title>
+  <title>Сканер QR-кода</title>
   <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
 </head>
 <body>
-  <h1>Scan QR-кодов</h1>
+  <h1>Сканер QR-кодов</h1>
   <p>Нажмите на кнопку ниже, чтобы открыть камеру и начать сканирование QR-кода:</p>
   <button onclick="scanQR()">Сканировать QR-код</button>
   <div id="qr-result"></div>
@@ -14,11 +14,29 @@
   <script>
     const codeReader = new ZXing.BrowserQRCodeReader();
     const resultContainer = document.getElementById('qr-result');
+    const apiUrl = "http://example.com/post-data"; // Замените на ваш URL API
 
     function scanQR() {
       codeReader
         .decodeOnceFromVideoDevice(undefined, 'video')
         .then(result => {
+          // Создаем объект с данными для POST-запроса
+          const postData = { id: result.text };
+          
+          // Отправляем POST-запрос
+          fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(postData)
+          })
+          .then(response => {
+            // Выводим результат в консоль
+            console.log(response);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+
           resultContainer.textContent = result.text;
         })
         .catch(error => {
