@@ -26,18 +26,26 @@
         codeReader
           .decodeOnceFromVideoDevice(undefined, 'video')
           .then(result => {
+            status.textContent = 'Отправка запроса...';
             fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
               .then(response => {
                 console.log(response);
+                return response.text();
+              })
+              .then(data => {
+                status.textContent = 'Готово';
+                const responseContainer = document.createElement('div');
+                responseContainer.textContent = data;
+                resultContainer.appendChild(responseContainer);
               })
               .catch(error => {
                 console.error(error);
+                resultContainer.textContent = 'Ошибка отправки запроса';
               });
 
             resultContainer.textContent = result.text;
             video.pause();
             codeReader.reset();
-            status.textContent = 'Готово';
           })
           .catch(error => {
             console.error(error);
