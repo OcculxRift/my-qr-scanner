@@ -24,7 +24,7 @@ p {
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #F08080;
   color: white;
   padding: 24px 48px;
   font-size: 64px;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-  background-color: #3e8e41;
+  background-color: #FA8072;
 }
 
 #qr-result {
