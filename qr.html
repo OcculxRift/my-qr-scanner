@@ -3,18 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>QR Scanner</title>
-    <style>
-      .container {
-        max-width: 500px;
-        margin: 0 auto;
-      }
-      #video {
-        border: 3px solid black;
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
   </head>
   <body>
@@ -24,7 +13,7 @@
       <button onclick="scanQR()">Scan QR code</button>
       <div id="qr-result"></div>
       <div id="status"></div>
-      <video id="video"></video>
+      <video id="video" width="100%" height="auto"></video>
     </div>
 
     <script>
@@ -35,24 +24,24 @@
 
       function scanQR() {
         codeReader
-          .decodeFromVideoDevice(undefined, 'video', (result, error, stopScanning) => {
-            if (result) {
-              fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
-                .then(response => {
-                  console.log(response);
-                  resultContainer.textContent = result.text;
-                  status.textContent = 'Готово';
-                  stopScanning();
-                })
-                .catch(error => {
-                  console.error(error);
-                  resultContainer.textContent = 'Scanning error';
-                });
-            }
-            if (error) {
-              console.error(error);
-              resultContainer.textContent = 'Scanning error';
-            }
+          .decodeOnceFromVideoDevice(undefined, 'video')
+          .then(result => {
+            fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+
+            resultContainer.textContent = result.text;
+            video.pause();
+            codeReader.reset();
+            status.textContent = 'Готово';
+          })
+          .catch(error => {
+            console.error(error);
+            resultContainer.textContent = 'Scanning error';
           });
       }
     </script>
