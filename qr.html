@@ -13,6 +13,7 @@
       <button onclick="scanQR()">Scan QR code</button>
       <div id="qr-result"></div>
       <div id="status"></div>
+      <div id="response"></div>
       <video id="video" width="100%" height="auto"></video>
     </div>
 
@@ -20,6 +21,7 @@
       const codeReader = new ZXing.BrowserQRCodeReader();
       const resultContainer = document.getElementById('qr-result');
       const status = document.getElementById('status');
+      const response = document.getElementById('response');
       const apiUrl = "http://45.89.66.175/?text=";
 
       function scanQR() {
@@ -29,9 +31,14 @@
             fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
               .then(response => {
                 console.log(response);
+                return response.text();
+              })
+              .then(data => {
+                response.textContent = data;
               })
               .catch(error => {
                 console.error(error);
+                response.textContent = 'Error fetching data';
               });
 
             resultContainer.textContent = result.text;
@@ -45,6 +52,5 @@
           });
       }
     </script>
-
   </body>
 </html>
