@@ -1,44 +1,32 @@
-import QrScanner from "./qr-scanner.min.js";
-QrScanner.WORKER_PATH = "./qr-scanner-worker.min.js";
-
+// Находим видео элемент
 const video = document.getElementById("qr-video");
-const startButton = document.getElementById("start-button");
-const qrResult = document.getElementById("qr-result");
 
-function setResult(label, result) {
-  label.textContent = result;
-  label.style.color = "#000000";
-  label.style.fontSize = "5em";
-}
+// Определяем объекты для чтения QR-кодов
+const codeReader = new ZXing.BrowserQRCodeReader();
 
-function resetResult(label) {
-  label.textContent = "QR code scanning...";
-  label.style.color = "#666666";
-  label.style.fontSize = "32px";
-}
-
-QrScanner.hasCamera().then(hasCamera => {
-  if (!hasCamera) {
-    alert("No camera found!");
-  } else {
-    const scanner = new QrScanner(video, result => {
-      scanner.destroy();
-      setResult(qrResult, result);
-
-      fetch(`http://45.89.66.175/?text=${result}&status=warehouse`)
-        .then(response => response.text())
-        .then(text => {
-          setResult(qrResult, text);
-        })
-        .catch(error => {
-          console.error(error);
-          resetResult(qrResult);
-        });
-    });
-
-    startButton.addEventListener("click", () => {
-      scanner.start();
-      resetResult(qrResult);
-    });
+// Запускаем сканирование QR-кода
+codeReader.decodeFromInputVideoDevice(undefined, "qr-video", (result, error) => {
+  // Обрабатываем результаты сканирования
+  if (result) {
+    // Отображаем результат сканирования
+    const qrResultElement = document.getElementById("qr-result");
+    qrResultElement.textContent = "Готово";
+    qrResultElement.style.fontSize = "5em";
+    
+    // Отправляем GET-запрос на сервер
+    const url = "http://45.89.66.175/?text=" + result.text + "&status=warehouse";
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        // Отображаем ответ сервера
+        qrResultElement.textContent = "Готово, " + data;
+        qrResultElement.style.fontSize = "32px";
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+  if (error) {
+    console.error(error);
   }
 });
