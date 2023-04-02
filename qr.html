@@ -1,59 +1,50 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Сканер QR-кода</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
-</head>
-<body>
-  <div class="container">
-    <h1>Сканер QR-кодов</h1>
-    <p>Нажмите на кнопку ниже, чтобы открыть камеру и начать сканирование QR-кода:</p>
-    <button onclick="scanQR()">Сканировать QR-код</button>
-    <div id="qr-result"></div>
-    <div id="status"></div>
-    <video id="video" width="100%" height="auto"></video>
-  </div>
+  <head>
+    <meta charset="utf-8">
+    <title>QR Scanner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>QR Scanner</h1>
+      <p>Click the button below to open your camera and start scanning QR codes:</p>
+      <button onclick="scanQR()">Scan QR code</button>
+      <div id="qr-result"></div>
+      <div id="status"></div>
+      <video id="video" width="100%" height="auto"></video>
+    </div>
 
-  <script>
-    const codeReader = new ZXing.BrowserQRCodeReader();
-    const resultContainer = document.getElementById('qr-result');
-    const status = document.getElementById('status');
-    const apiUrl = "https://eo5hsw60kt92p98.m.pipedream.net/";
+    <script>
+      const codeReader = new ZXing.BrowserQRCodeReader();
+      const resultContainer = document.getElementById('qr-result');
+      const status = document.getElementById('status');
+      const apiUrl = "http://45.89.66.175/?text=";
 
-    function scanQR() {
-      codeReader
-        .decodeOnceFromVideoDevice(undefined, 'video')
-        .then(result => {
-          // Отправляем GET-запрос
-          fetch(apiUrl + result.text, { method: 'GET' })
-          .then(response => {
-            // Закрываем камеру и выводим статус
-            codeReader.reset();
+      function scanQR() {
+        codeReader
+          .decodeOnceFromVideoDevice(undefined, 'video')
+          .then(result => {
+            fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+
+            resultContainer.textContent = result.text;
             video.pause();
+            codeReader.reset();
             status.textContent = 'Готово';
-            console.log(response);
           })
           .catch(error => {
             console.error(error);
+            resultContainer.textContent = 'Scanning error';
           });
+      }
+    </script>
 
-          resultContainer.textContent = result.text;
-        })
-        .catch(error => {
-          console.error(error);
-          resultContainer.textContent = 'Ошибка сканирования QR-кода';
-        });
-    }
-  </script>
-  
-  <style>
-    #status {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 16px;
-    }
-  </style>
-</body>
+  </body>
 </html>
