@@ -34,7 +34,7 @@
                 alert(error);
               });
 
-            resultContainer.textContent = result.text;
+            resultContainer.textContent = (apiUrl + result.text + "&status=warehouse").text;
             video.pause();
             codeReader.reset();
             status.textContent = 'Готово';
