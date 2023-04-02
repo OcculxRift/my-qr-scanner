@@ -12,12 +12,14 @@
     <p>Нажмите на кнопку ниже, чтобы открыть камеру и начать сканирование QR-кода:</p>
     <button onclick="scanQR()">Сканировать QR-код</button>
     <div id="qr-result"></div>
+    <div id="status"></div>
     <video id="video" width="100%" height="auto"></video>
   </div>
 
   <script>
     const codeReader = new ZXing.BrowserQRCodeReader();
     const resultContainer = document.getElementById('qr-result');
+    const status = document.getElementById('status');
     const apiUrl = "https://eo5hsw60kt92p98.m.pipedream.net/";
 
     function scanQR() {
@@ -27,7 +29,10 @@
           // Отправляем GET-запрос
           fetch(apiUrl + result.text, { method: 'GET' })
           .then(response => {
-            // Выводим результат в консоль
+            // Закрываем камеру и выводим статус
+            codeReader.reset();
+            video.pause();
+            status.textContent = 'Готово';
             console.log(response);
           })
           .catch(error => {
@@ -42,5 +47,13 @@
         });
     }
   </script>
+  
+  <style>
+    #status {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 16px;
+    }
+  </style>
 </body>
 </html>
