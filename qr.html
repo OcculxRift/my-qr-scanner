@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>QR Code Scanner</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta charset="UTF-8">
+    <title>QR Scanner</title>
+    <style>
+      /* CSS стили */
+    </style>
   </head>
   <body>
     <div class="container">
-      <h1>QR Code Scanner</h1>
-      <p>Scan a QR code to get started</p>
-      <video id="qr-video"></video>
-      <p id="qr-result">QR code scanning...</p>
-      <button id="start-button">Start</button>
+      <h1>QR Scanner</h1>
+      <video id="qr-video" width="640" height="480" autoplay></video>
+      <p id="qr-result">Сканируйте QR-код</p>
     </div>
-    <script type="module" src="script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.18.6@zxing.umd.min.js"></script>
+    <script>
+      // JavaScript код
+    </script>
   </body>
 </html>
