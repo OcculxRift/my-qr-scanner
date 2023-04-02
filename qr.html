@@ -24,25 +24,24 @@
 
       function scanQR() {
         codeReader
-          .decodeOnceFromVideoDevice(undefined, 'video')
-          .then(result => {
-            fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
-              .then(response => {
-                console.log(response);
-                resultContainer.innerHTML += '<br><br>' + 'GET-запрос отправлен: ' + apiUrl + result.text + "&status=warehouse";
-              })
-              .catch(error => {
-                console.error(error);
-              });
-
-            resultContainer.textContent = result.text;
-            video.pause();
-            codeReader.reset();
-            status.textContent = 'Готово';
-          })
-          .catch(error => {
-            console.error(error);
-            resultContainer.textContent = 'Scanning error';
+          .decodeFromVideoDevice(undefined, 'video', (result, error, stopScanning) => {
+            if (result) {
+              fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
+                .then(response => {
+                  console.log(response);
+                  resultContainer.textContent = result.text;
+                  status.textContent = 'Готово';
+                  stopScanning();
+                })
+                .catch(error => {
+                  console.error(error);
+                  resultContainer.textContent = 'Scanning error';
+                });
+            }
+            if (error) {
+              console.error(error);
+              resultContainer.textContent = 'Scanning error';
+            }
           });
       }
     </script>
