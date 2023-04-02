@@ -3,7 +3,18 @@
   <head>
     <meta charset="utf-8">
     <title>QR Scanner</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+      #video {
+        border: 3px solid black;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+    </style>
     <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
   </head>
   <body>
@@ -13,7 +24,7 @@
       <button onclick="scanQR()">Scan QR code</button>
       <div id="qr-result"></div>
       <div id="status"></div>
-      <video id="video" width="100%" height="auto"></video>
+      <video id="video"></video>
     </div>
 
     <script>
