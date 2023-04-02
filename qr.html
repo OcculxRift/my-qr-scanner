@@ -70,7 +70,7 @@
             fetch(requestText, { method: 'GET' })
               .then(response => {
                 console.log(response);
-                resultContainer.textContent = `Request: ${requestText}\n\nResponse: ${response}`;
+                resultContainer.innerHTML = `<p>Request: ${requestText}</p><p>Response: ${response}</p>`;
               })
               .catch(error => {
                 console.error(error);
