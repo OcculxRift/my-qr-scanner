@@ -14,30 +14,13 @@
   <script>
     const codeReader = new ZXing.BrowserQRCodeReader();
     const resultContainer = document.getElementById('qr-result');
-    const apiUrl = "http://example.com/post-data"; // Замените на ваш URL API
+    const apiUrl = "https://eo5hsw60kt92p98.m.pipedream.net/";
 
     function scanQR() {
       codeReader
         .decodeOnceFromVideoDevice(undefined, 'video')
         .then(result => {
-          // Создаем объект с данными для POST-запроса
-          const postData = { id: result.text };
-          
-          // Отправляем POST-запрос
-          fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(postData)
-          })
-          .then(response => {
-            // Выводим результат в консоль
-            console.log(response);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-
-          resultContainer.textContent = result.text;
+          window.location.href = apiUrl + "?id=" + result.text;
         })
         .catch(error => {
           console.error(error);
