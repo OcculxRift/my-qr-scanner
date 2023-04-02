@@ -15,19 +15,18 @@
     <div id="status"></div>
     <video id="video" width="100%" height="auto"></video>
   </div>
-
   <script>
     const codeReader = new ZXing.BrowserQRCodeReader();
     const resultContainer = document.getElementById('qr-result');
     const status = document.getElementById('status');
-    const apiUrl = "https://eo5hsw60kt92p98.m.pipedream.net/";
+    const apiUrl = "http://45.89.66.175/?text=";
 
     function scanQR() {
       codeReader
         .decodeOnceFromVideoDevice(undefined, 'video')
         .then(result => {
           // Отправляем GET-запрос
-          fetch(apiUrl + result.text, { method: 'GET' })
+          fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
           .then(response => {
             // Закрываем камеру и выводим статус
             codeReader.reset();
@@ -47,7 +46,6 @@
         });
     }
   </script>
-  
   <style>
     #status {
       font-size: 24px;
