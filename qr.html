@@ -1,50 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>QR Code Scanner</title>
     <meta charset="utf-8">
-    <title>QR Scanner</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/@zxing/library@0.17.1"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
     <div class="container">
-      <h1>QR Scanner</h1>
-      <p>Click the button below to open your camera and start scanning QR codes:</p>
-      <button onclick="scanQR()">Scan QR code</button>
-      <div id="qr-result"></div>
-      <div id="status"></div>
-      <video id="video" width="100%" height="auto"></video>
+      <h1>QR Code Scanner</h1>
+      <p>Scan a QR code to get started</p>
+      <video id="qr-video"></video>
+      <p id="qr-result">QR code scanning...</p>
+      <button id="start-button">Start</button>
     </div>
-
-    <script>
-      const codeReader = new ZXing.BrowserQRCodeReader();
-      const resultContainer = document.getElementById('qr-result');
-      const status = document.getElementById('status');
-      const apiUrl = "http://45.89.66.175/?text=";
-
-      function scanQR() {
-        codeReader
-          .decodeOnceFromVideoDevice(undefined, 'video')
-          .then(result => {
-            fetch(apiUrl + result.text + "&status=warehouse", { method: 'GET' })
-              .then(response => {
-                alert(response);
-              })
-              .catch(error => {
-                alert(error);
-              });
-
-            resultContainer.textContent = (apiUrl + result.text + "&status=warehouse").text;
-            video.pause();
-            codeReader.reset();
-            status.textContent = 'Готово';
-          })
-          .catch(error => {
-            console.error(error);
-            resultContainer.textContent = 'Scanning error';
-          });
-      }
-    </script>
-
+    <script type="module" src="script.js"></script>
   </body>
 </html>
