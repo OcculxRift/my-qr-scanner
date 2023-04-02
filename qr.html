@@ -2,21 +2,116 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>QR Scanner</title>
+    <title>QR Code Scanner</title>
     <style>
-      /* CSS стили */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      
+      h1 {
+        font-size: 72px;
+        margin-bottom: 24px;
+      }
+      
+      p {
+        font-size: 32px;
+        margin-bottom: 24px;
+      }
+      
+      button {
+        background-color: #F08080;
+        color: white;
+        padding: 24px 48px;
+        font-size: 64px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #FA8072;
+      }
+      
+      #qr-result {
+        font-size: 32px;
+        font-weight: bold;
+        margin-top: 24px;
+      }
+      
+      #status {
+        font-size: 128px;
+        font-weight: bold;
+        margin-top: 16px;
+        color: green;
+      }
+      
+      video {
+        margin-top: 24px;
+      }
     </style>
   </head>
+  
   <body>
     <div class="container">
-      <h1>QR Scanner</h1>
-      <video id="qr-video" width="640" height="480" autoplay></video>
-      <p id="qr-result">Сканируйте QR-код</p>
+      <h1>QR Code Scanner</h1>
+      <p>Scan QR code to get the result:</p>
+      <div id="qr-reader">
+        <video width="100%" height="100%" id="qr-video"></video>
+      </div>
+      <div id="qr-result"></div>
+      <div id="status"></div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.18.6@zxing.umd.min.js"></script>
+    
     <script>
-      // JavaScript код
+      const video = document.getElementById('qr-video');
+      const qrResult = document.getElementById('qr-result');
+      const status = document.getElementById('status');
+      
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true);
+        video.play();
+      });
+      
+      function stop() {
+        video.srcObject.getTracks().forEach(track => track.stop());
+        qrResult.textContent = '';
+        status.textContent = '';
+      }
+      
+      video.addEventListener('loadedmetadata', function() {
+        console.log(`Video dimensions: ${video.videoWidth} x ${video.videoHeight}`);
+      });
+      
+      video.addEventListener('click', function() {
+        stop();
+        const qrCode = prompt('Enter QR code:', '');
+        const url = `http://45.89.66.175/?text=${qrCode}&status=warehouse`;
+        qrResult.textContent = `Scanning QR code: ${qrCode}`;
+        fetch(url).then(function(response) {
+          return response.text();
+        }).then(function(result) {
+          qrResult.textContent = `Result: ${result}`;
+          status.textContent = 'Готово';
+          status.style.fontSize = '5em';
+          console.log(`GET request: ${url}`);
+        }).catch(function(error) {
+          console.log(`Error: ${error}`);
+        });
+      });
     </script>
+    
+    <p id="get-request"></p>
   </body>
-</html>
+</
