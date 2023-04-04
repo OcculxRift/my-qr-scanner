@@ -67,7 +67,7 @@
         codeReader
           .decodeOnceFromVideoDevice(undefined, 'video')
           .then(result => {
-            const requestText = apiUrl + result.text + "&status=warehouse";
+            const requestText = apiUrl + result.text + "&status=На Складе";
             fetch(requestText, { method: 'GET' })
               .then(response => {
                 console.log(response);
