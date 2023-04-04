@@ -78,7 +78,7 @@
       function sendRequest(event) {
         event.preventDefault();
         const input = event.target.elements.track_number;
-        const requestText = apiUrl + input.value + "&status=На Складе";
+        const requestText = apiUrl + input.value + "&status=Ожидаем прибытия на склад";
         fetch(requestText, { method: 'GET' })
           .then(response => {
             console.log(response);
