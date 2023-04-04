@@ -52,6 +52,14 @@
     </style>
   </head>
   <body>
+    <button onclick="goToQR2()">Перейти на страницу QR2</button>
+
+<script>
+  function goToQR2() {
+    window.location.href = 'qr2.html';
+  }
+</script>
+
     <div class="container">
       <h1>Введите трек-номер</h1>
       <form onsubmit="sendRequest(event)">
